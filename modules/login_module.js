@@ -67,12 +67,12 @@ module.exports = function(mongo, url, assert) {
     //End getEmployee
 
     //start getQuery
-    getQuery: function( callBack) {
+    getQuery: function(company, callBack) {
       try {
        array=[];
         mongo.connect(url, function(err, db) {
           assert.equal(null, err);
-          var cursor = db.collection(EMPLOYEE_DETAILS).find({  status: "NotSolve"  });
+          var cursor = db.collection(EMPLOYEE_DETAILS).find({ $and: [{ status: "notSolve" }, { "company": company }] });
           cursor.forEach(
             function(doc, err) {
               assert.equal(null, err);
@@ -105,7 +105,7 @@ module.exports = function(mongo, url, assert) {
         mongo.connect(url, function (err, db) {
           assert.equal(null,err);
            //update employee colletion notSolve to processing
-          db.collection("Employee").update({email:user_email}, {$set : {status:"processing"}}, function (err, result) {
+          db.collection("Employee").update({user_email:user_email}, {$set : {status:"processing"}}, function (err, result) {
             // if (err) {
             //     callBack(err, true, "query assign Unsuccessfully");
             // } 
@@ -115,7 +115,7 @@ module.exports = function(mongo, url, assert) {
             assert.equal(null,err);
           });
           //update employeeDetails colletion available to false
-          db.collection("employeeDetails").update({emp_email:emp_email}, {$set : {available:"false"}}, function (err, result) {
+          db.collection("employeeDetails").update({emp_email:emp_email}, {$set :{available:"false","user_email":user_email}}, function (err, result) {
             if (err) {
                 callBack(err, true, "set available to false unsuccessfully");
             } 
@@ -125,8 +125,72 @@ module.exports = function(mongo, url, assert) {
           db.close();
           });  //end update employeeDetails
         });
-  }
+  },
   //End assignWork
+  //start-> Employee get user email
+  getUser: function(user_email, callBack) {
+    try {
+     array=[];
+      mongo.connect(url, function(err, db) {
+        assert.equal(null, err);
+        var cursor = db.collection(employeeDetails).find({"user_email": user_email });
+        cursor.forEach(
+          function(doc, err) {
+            assert.equal(null, err);
+            console.log(doc);
+            if (err) {
+              callBack(null, true, err);
+            } else {
+              array.push(doc);
+            }
+           
+          },
+          function() {
+            if (array.length ==0) {
+              callBack(null, true, "nothing found");
+            } else {
+              callBack(array[user_email], false, " user details Found");
+            }
+          }
+        );
+      });
+    } catch (e) {
+      callBack(mobile_exists, true, e);
+    }
+  },
+  //End getUser
+  //start empGetQuery
+  empGetQuery: function(user_email, callBack) {
+    try {
+     array=[];
+      mongo.connect(url, function(err, db) {
+        assert.equal(null, err);
+        var cursor = db.collection(EMPLOYEE_DETAILS).find({"user_email": user_email });
+        cursor.forEach(
+          function(doc, err) {
+            assert.equal(null, err);
+            console.log(doc);
+            if (err) {
+              callBack(null, true, err);
+            } else {
+              array.push(doc);
+            }
+           
+          },
+          function() {
+            if (array.length ==0) {
+              callBack(null, true, "nothing found");
+            } else {
+              callBack(array[user_email], false, " user Query Found");
+            }
+          }
+        );
+      });
+    } catch (e) {
+      callBack(mobile_exists, true, e);
+    }
+  },
+  //End empGetQuery
 }
   return login_module;
 };

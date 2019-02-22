@@ -26,7 +26,7 @@ app.post('/signUp', function(req, res) {
         name: req.body.name,
         password: req.body.password,
         phone_number: req.body.phone_number,
-        email: req.body.email,
+        user_email: req.body.user_email,
       };
 
       mongo.connect(url, function (err, db) {
@@ -47,7 +47,7 @@ app.post('/addquery', function(req, res) {
    
     mongo.connect(url, function (err, db) {
       assert.equal(null,err);
-      db.collection("Employee").update({email: req.body.email}, {$set : {query:req.body.query}}, function (err, result) {
+      db.collection("Employee").update({user_email: req.body.user_email}, {$set : {query:req.body.query,company:req.body.company}}, function (err, result) {
         if (err) {
             res.json({status: false, message:" Unsuccessfully"});
         } 

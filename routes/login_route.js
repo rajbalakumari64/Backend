@@ -53,6 +53,7 @@ module.exports = {
 app.post("/find_user_query", function(req, res) {
   try { 
        login_module.getQuery(
+         req.body.company,
         function(result, error, message) {
           if (error) {
             res.json({ status: false, message: message });
@@ -71,9 +72,9 @@ app.post("/find_user_query", function(req, res) {
 //API TO admin assign work
 app.post("/admin_assign_work", function(req, res) {
   try {
-  
+   
       login_module.assignWork(
-        req.body.email,
+        req.body.user_email,
         req.body.emp_email,
         
         function(result, error, message) {
@@ -91,9 +92,43 @@ app.post("/admin_assign_work", function(req, res) {
   }
 });
 //END OF admin assign work
-
-
-
+//start emp_check_assigned_work
+app.post("/emp_check_assigned_work", function(req, res) {
+  try { 
+       login_module.getUser(
+        req.body.user_email,
+        function(result, error, message) {
+          if (error) {
+            res.json({ status: false, message: message });
+          } else {
+            res.json({ array,status: true, message: message });
+          }
+        }
+      );
+  } catch (er) {
+    console.log("error occurred : " + er);
+    res.json({ status: false, message: er });
+  }
+});
+//end emp_check_assigned_work
+app.post("/emp_find_user_query", function(req, res) {
+  try { 
+       login_module.empGetQuery(
+        req.body.user_email,
+        function(result, error, message) {
+          if (error) {
+            res.json({ status: false, message: message });
+          } else {
+            res.json({ array,status: true, message: message });
+          }
+        }
+      );
+  } catch (er) {
+    console.log("error occurred : " + er);
+    res.json({ status: false, message: er });
+  }
+});
+//end emp_check_assigned_work
 
 
   }
