@@ -13,7 +13,6 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-
 //LOCAL 
 var url = "mongodb://localhost:27017/Employees";
 
@@ -25,9 +24,9 @@ app.get('/', function(req, res) {
 app.post('/add_employee2', function(req, res) {
     var new_emp = {
         name: req.body.name,
-        address: req.body.address,
+        password: req.body.password,
         phone_number: req.body.phone_number,
-        salary: req.body.salary,
+        email: req.body.email,
       };
 
       mongo.connect(url, function (err, db) {
@@ -44,17 +43,18 @@ app.post('/add_employee2', function(req, res) {
       });
 });
 //end of add employee
-//star
 
-//tju
+
+
+
 
 app.listen(app.get('port'), function() {
     console.log('Node app is running on port', app.get('port'));
 });
 
 //Require Routes
-var employeeroute = require('./routes/employee_route');
+var loginRoute = require('./routes/login_route');
 
 //Configure Routes
-employeeroute.configure(app, mongo, ObjectID, url, assert);
+loginRoute.configure(app, mongo, ObjectID, url, assert);
 
