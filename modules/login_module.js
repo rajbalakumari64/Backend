@@ -1,5 +1,6 @@
 //LIST OF ALL DATABASES
 const EMPLOYEE_DETAILS = "Employee";
+const employeeDetails = "employeeDetails";
 
 module.exports = function(mongo, url, assert) {
   var login_module = {
@@ -31,6 +32,42 @@ module.exports = function(mongo, url, assert) {
       }
     },
     //End of Existing EMP
+
+    //start getEmployee
+    getEmployee: function(available, callBack) {
+      try {
+       array=[];
+        mongo.connect(url, function(err, db) {
+          assert.equal(null, err);
+          var cursor = db.collection(employeeDetails).find({"available": available });
+          cursor.forEach(
+            function(doc, err) {
+              assert.equal(null, err);
+              console.log(doc);
+              if (err) {
+                callBack(null, true, err);
+              } else {
+                array.push(doc);
+              }
+             
+            },
+            function() {
+              if (array.length ==0) {
+                callBack(null, true, "nothing found");
+              } else {
+                callBack(array, false, " details Found");
+              }
+            }
+          );
+        });
+      } catch (e) {
+        callBack(mobile_exists, true, e);
+      }
+    },
+    //End getEmployee
+
+
+
 
   };
   return login_module;

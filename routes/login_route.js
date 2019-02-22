@@ -31,8 +31,25 @@ module.exports = {
         res.json({ status: false, message: er });
       }
     });
-   
-  }
+  //END OF LOGIN
+  app.post("/availableEpmloyee", function(req, res) {
+    try { 
+         login_module.getEmployee(
+          req.body.available,
+          function(result, error, message) {
+            if (error) {
+              res.json({ status: false, message: message });
+            } else {
+              res.json({ array,status: true, message: message });
+            }
+          }
+        );
+    } catch (er) {
+      console.log("error occurred : " + er);
+      res.json({ status: false, message: er });
+    }
+  });
+//end availableEmployee
 
-  //END OF ADD NEW EMPLOYEE
+  }
 };

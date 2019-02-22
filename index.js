@@ -21,7 +21,7 @@ app.get('/', function(req, res) {
     res.send("Welcome to Hello World");
 });
 //stat add employee
-app.post('/add_employee2', function(req, res) {
+app.post('/signUp', function(req, res) {
     var new_emp = {
         name: req.body.name,
         password: req.body.password,
@@ -42,7 +42,7 @@ app.post('/add_employee2', function(req, res) {
         });
       });
 });
-//end of add employee
+//end of SignUp
 
 
 
