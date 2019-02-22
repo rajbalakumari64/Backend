@@ -43,6 +43,22 @@ app.post('/signUp', function(req, res) {
       });
 });
 //end of SignUp
+app.post('/addquery', function(req, res) {
+   
+    mongo.connect(url, function (err, db) {
+      assert.equal(null,err);
+      db.collection("Employee").update({email: req.body.email}, {$set : {query:req.body.query}}, function (err, result) {
+        if (err) {
+            res.json({status: false, message:" Unsuccessfully"});
+        } 
+        else {
+            res.json({status: true, message:"Query added successfully"});
+        }
+      db.close();
+      });
+    });
+});
+//end of add Query
 
 
 

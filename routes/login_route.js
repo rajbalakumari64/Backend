@@ -50,6 +50,51 @@ module.exports = {
     }
   });
 //end availableEmployee
+app.post("/find_user_query", function(req, res) {
+  try { 
+       login_module.getQuery(
+        function(result, error, message) {
+          if (error) {
+            res.json({ status: false, message: message });
+          } else {
+            res.json({ array,status: true, message: message });
+          }
+        }
+      );
+  } catch (er) {
+    console.log("error occurred : " + er);
+    res.json({ status: false, message: er });
+  }
+});
+//end find user query
+
+//API TO admin assign work
+app.post("/admin_assign_work", function(req, res) {
+  try {
+  
+      login_module.assignWork(
+        req.body.email,
+        req.body.emp_email,
+        
+        function(result, error, message) {
+          if (error) {
+            res.json({ status: false, message: message });
+          } else {
+            res.json({ status: true, message: message });
+          }
+        }
+      );
+    
+  } catch (er) {
+    console.log("error occurred : " + er);
+    res.json({ status: false, message: er });
+  }
+});
+//END OF admin assign work
+
+
+
+
 
   }
 };
