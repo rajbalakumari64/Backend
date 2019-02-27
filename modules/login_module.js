@@ -7,7 +7,7 @@ module.exports = function(mongo, url, assert) {
     //check login details
     login_details_exists: function(name, password, callBack) {
       try {
-        Name_exists = 0;
+        Name_exists = false;
         mongo.connect(url, function(err, db) {
           assert.equal(null, err);
           var cursor = db.collection(EMPLOYEE_DETAILS).find({ $and: [{ name: name }, { password: password }] });

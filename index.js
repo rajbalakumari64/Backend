@@ -6,6 +6,7 @@ var assert = require('assert');
 var bodyParser = require('body-parser');
 var cors = require('cors');
 var ObjectID = require('mongodb').ObjectID;
+var jwt = require('jsonwebtoken');
 
 //Setting Port
 app.set('port', (process.env.PORT || 8000));
@@ -19,6 +20,15 @@ var url = "mongodb://localhost:27017/Employees";
 //WELCOME API
 app.get('/', function(req, res) {
     res.send("Welcome to Hello World");
+});
+app.get('/toke', function(req, res) {
+    var token = jwt.sign(req.body.name, "12345");
+    res.json({result: token});
+});
+app.post('/verify', function(req, res) {
+    jwt.verify(req.body.token, "12345", function(err, decoded){
+        res.json({result: decoded})
+    });
 });
 //stat add employee
 app.post('/signUp', function(req, res) {
