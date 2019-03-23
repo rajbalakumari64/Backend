@@ -32,25 +32,34 @@ app.post('/verify', function(req, res) {
 });
 //stat add employee
 app.post('/signUp', function(req, res) {
+    if ( req.body.hasOwnProperty("name") && req.body.hasOwnProperty("password") ) {
     var new_emp = {
         name: req.body.name,
         password: req.body.password,
         phone_number: req.body.phone_number,
         user_email: req.body.user_email,
+        company:"",
+        status:"notSolve",
+        query:"",
+        type:"user"
       };
 
       mongo.connect(url, function (err, db) {
         assert.equal(null,err);
         db.collection("Employee").insertOne(new_emp, function (err, result) {
         if (err) {
-            res.json({status: false, message:"Data could not be added successfully"});
+            res.json({status: false,send:"no", message:"Data could not be added successfully"});
         } 
         else {
-            res.json({status: true, message:"Data added successfully"});
+            res.json({status: true,send:"yes", message:"Data added successfully"});
         }
         db.close();
         });
       });
+      }
+      else{
+        res.json({status: false,send:"no", message:"plz enter name"});
+      }
 });
 //end of SignUp
 app.post('/addquery', function(req, res) {
